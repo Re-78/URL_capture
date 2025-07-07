@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>URL capturre</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      margin: 20px;
+      background: #f5f5f5;
+      text-align: center;
+    }
+
+    #browser {
+      background: white;
+      border: 1px solid #ccc;
+      padding: 20px;
+      max-width: 800px;
+      margin: 0 auto;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    #browser_control {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    input[type="text"] {
+      width: 60%;
+      padding: 10px;
+      font-size: 16px;
+    }
+
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    #wait_time {
+      padding: 8px;
+    }
+
+    #browser_canvas img {
+      max-width: 100%;
+      margin-top: 20px;
+      border: 1px solid #ccc;
+    }
+
+    .toggle {
+      display: inline-flex;
+      align-items: center;
+      cursor: pointer;
+      margin-top: 10px;
+      user-select: none;
+    }
+
+    .toggle input {
+      display: none;
+    }
+
+    .toggle-label {
+      padding: 6px 12px;
+      background-color: #ddd;
+      border-radius: 20px;
+      margin-left: 10px;
+    }
+
+    .toggle input:checked + .toggle-label {
+      background-color: #4CAF50;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>URL capture</h1>
+
+  <div id="browser">
+    <div id="browser_control">
+<input type="text" id="url_box" placeholder="調査したいURLを入力してください">
+<button id="go_btn">スクショ取得</button>
+<img id="captured_img" src="" alt="スクリーンショット" style="max-width: 100%; display:none;">
+
+
+    </div>
+
+    <div id="browser_canvas">
+      <p>ここにキャプチャ画像が表示されます</p>
+    </div>
+  </div>
+
+<script>
+document.getElementById('go_btn').addEventListener('click', () => {
+     const result = prompt("password");
+     if(result==="0120"){
+  let url = document.getElementById('url_box').value.trim();
+
+  if (!url) {
+    alert("URLを入力してください");
+    return;
+  }
+
+  // URLがhttp/httpsで始まっていない場合、http://を追加
+  if (!/^https?:\/\//i.test(url)) {
+    url = "http://" + url;
+  }
+
+  // 簡易URLチェック（もっと厳密にするなら正規表現を使っても良い）
+  try {
+    new URL(url); // 無効なURLならエラーになる
+  } catch (e) {
+    alert("正しいURLを入力してください");
+    return;
+  }
+
+  // APIflashのURLを構築
+  const apiKey = "5c66f8a0bf6b4a03bf8d6a644885af9e";
+  const apiUrl = `https://api.apiflash.com/v1/urltoimage?access_key=${apiKey}&url=${encodeURIComponent(url)}&format=png&full_page=true&width=1280&height=720`;
+
+  const img = document.getElementById('captured_img');
+  img.src = apiUrl;
+  img.alt = "スクリーンショットを取得中...";
+  img.style.display = "block";
+}else{
+ return;
+}
+});
+</script>
+
+
+</body>
+</html>
