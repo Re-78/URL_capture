@@ -106,20 +106,17 @@ document.getElementById('go_btn').addEventListener('click', () => {
     return;
   }
 
-  // URLがhttp/httpsで始まっていない場合、http://を追加
   if (!/^https?:\/\//i.test(url)) {
     url = "http://" + url;
   }
 
-  // 簡易URLチェック（もっと厳密にするなら正規表現を使っても良い）
   try {
-    new URL(url); // 無効なURLならエラーになる
+    new URL(url);
   } catch (e) {
     alert("正しいURLを入力してください");
     return;
   }
 
-  // APIflashのURLを構築
   const apiKey = "5c66f8a0bf6b4a03bf8d6a644885af9e";
   const apiUrl = `https://api.apiflash.com/v1/urltoimage?access_key=${apiKey}&url=${encodeURIComponent(url)}&format=png&full_page=true&width=1280&height=720`;
 
